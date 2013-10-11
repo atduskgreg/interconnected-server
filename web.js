@@ -1,8 +1,15 @@
 #!/usr/bin/env node
-
 var WebSocketServer = require('ws').Server
-  , wss = new WebSocketServer({port: 1337});
+  , http = require('http')
+  , express = require('express')
+  , app = express()
+  , port = process.env.PORT || 5000;
 
+app.use(express.static(__dirname + '/public'));
+
+var server = http.createServer(app);
+server.listen(port);
+var wss = new WebSocketServer({server: server});
 
 var clients = [];
 var currentId = 0;

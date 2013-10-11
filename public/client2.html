@@ -8,8 +8,6 @@
 		
 			
 			var ws = null;
-			var host = "127.0.0.1";
-			var port = 1337;
 			var myClientId = 2;
 			var mousePos = { x: -1, y: -1 };
 
@@ -20,7 +18,8 @@
 			function ready(){
 				$("h2").append(myClientId);
 				console.log("trying to open a websocket")
-				ws = new WebSocket("ws://"+host+":"+port+"/")
+				var host = location.origin.replace(/^http/, 'ws')
+      			var ws = new WebSocket(host);
 				// When the connection is open, send some data to the server
 				ws.onopen = function () {
 				  console.log("opened");

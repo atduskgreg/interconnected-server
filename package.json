@@ -1,16 +1,12 @@
 {
   "name": "interconnected-server",
-  "version": "0.0.1-26",
+  "version": "0.0.1",
   "dependencies": {
-    "websocket": "1.0.8",
-    "ws": "*"
+    "ws": "*",
+    "express": "3.x"
   },
   "engines": {
     "node": "0.10.x",
     "npm": "1.2.x"
-  },
-  "subdomain": "nterconnected-server",
-  "scripts": {
-    "start": "node web.js"
   }
 }
