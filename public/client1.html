@@ -1,0 +1,66 @@
+<!DOCTYPE HTML>
+	<html>
+	<head>
+		<meta http-equiv="Content-type" content="text/html; charset=utf-8">
+		<title>Interconnected Test</title>
+		<script src="//ajax.googleapis.com/ajax/libs/jquery/1.10.2/jquery.min.js"></script>
+		<script type="text/javascript" charset="utf-8">
+		
+			
+			var ws = null;
+			var host = "127.0.0.1";
+			var port = 1337;
+			var myClientId = 1;
+			var mousePos = { x: -1, y: -1 };
+
+			// jQuery(function($) {
+			    
+			// });
+			
+			function ready(){
+				$("h2").append(myClientId);
+				console.log("trying to open a websocket")
+				ws = new WebSocket("ws://"+host+":"+port+"/")
+				// When the connection is open, send some data to the server
+				ws.onopen = function () {
+				  console.log("opened");
+				  console.log("joining...");
+
+				  $(document).mousemove(function(event) {
+			        mousePos.x = event.pageX;
+			        mousePos.y = event.pageY;
+			        ws.send(JSON.stringify({"clientId" : myClientId, "location" : mousePos.x+ ","+mousePos.y}));
+
+			    	});
+
+				};
+
+				// oh, it did close
+				ws.onerror = function (e) {
+				  console.log('WebSocket did close ',e);
+				};
+				
+				// Log errors
+				ws.onerror = function (error) {
+				  console.log('WebSocket Error ' + error);
+				};
+
+			
+				// Log messages from the server
+				ws.onmessage = function (e) {
+					var result = $.parseJSON(e.data);
+					if(result.clientId != myClientId){
+						$("#not-me").html("found " + result.clientId + " at " + result.location);		
+					}			
+				}					
+			}
+						
+			document.addEventListener("DOMContentLoaded", ready, false);
+		</script>
+	</head>
+	<body>
+		<h2>I am </h2>
+		<p style="whitespace:pre" id="not-me"></p>
+
+	</body>
+	</html>
